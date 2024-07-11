@@ -23,6 +23,7 @@ WRAPPER_PATH="/usr/local/bin/metta-run"
 # Step 1: Clone the repository
 echo "Cloning the repository..."
 git clone $REPO_URL $INSTALL_DIR || error "Failed to clone repository."
+cd $INSTALL_DIR || error "Failed to enter the repository directory."
 
 
 # Step 2: Set up Python virtual environment
@@ -32,7 +33,7 @@ source $VENV_DIR/bin/activate || error "Failed to activate Python virtual enviro
 
 
 # Step 3: Install Python dependencies
-if [ -f "requirements.txt" ]; then
+if [ -f "./requirements.txt" ]; then
     echo "Installing Python dependencies..."
     pip install -r requirements.txt || error "Failed to install Python dependencies."
 else
