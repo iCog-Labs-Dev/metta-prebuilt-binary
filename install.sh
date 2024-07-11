@@ -11,10 +11,6 @@ command -v git >/dev/null 2>&1 || error "git is required but not installed. Abor
 command -v python3 >/dev/null 2>&1 || error "python3 is required but not installed. Aborting."
 command -v pip3 >/dev/null 2>&1 || error "pip3 is required but not installed. Aborting."
 
-# Ensure the script is run with root privileges
-if [ "$EUID" -ne 0 ]; then
-		error "Please run this script with root privileges. Aborting."
-fi
 
 # Variables
 REPO_URL="https://github.com/iCog-Labs-Dev/metta-prebuilt-binary.git"
