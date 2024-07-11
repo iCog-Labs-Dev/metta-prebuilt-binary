@@ -50,7 +50,7 @@ fi
 # Step 4: Move the binary to /usr/local/bin
 if [ -f "$BINARY_PATH" ]; then
     echo "Moving the binary to $DESTINATION_PATH..."
-    sudo mv $BINARY_PATH $DESTINATION_PATH || error "Failed to move the binary to /usr/local/bin."
+    sudo cp $BINARY_PATH $DESTINATION_PATH || error "Failed to move the binary to /usr/local/bin."
 
     # Make sure the binary is executable
     sudo chmod +x $DESTINATION_PATH || error "Failed to make the binary executable."
