@@ -18,6 +18,7 @@ INSTALL_DIR="$HOME/metta-bin"
 VENV_DIR="$INSTALL_DIR/venv"
 BINARY_PATH="$INSTALL_DIR/v0.1.11/metta"
 DESTINATION_PATH="/usr/local/bin/metta"
+WRAPPER_BINARY_PATH="$HOME/metta-bin/metta-run/release/metta-run"
 WRAPPER_PATH="/usr/local/bin/metta-run"
 
 # Step 1: Clone the repository
@@ -61,15 +62,19 @@ else
 fi
 
 # Step 5: Create a wrapper script to run metta with the virtual environment activated automatically
-if [ -f "$WRAPPER_PATH" ]; then
-    echo "$WRAPPER_PATH already exists. Creating a backup."
-    sudo mv "$WRAPPER_PATH" "${WRAPPER_PATH}.bak" || error "Failed to create backup of existing wrapper script."
+# Step 5: Move the wrapper binary to /usr/local/bin
+if [ -f "$WRAPPER_BINARY_PATH" ]; then
+    echo "Moving the wrapper binary to $WRAPPER_PATH..."
+    sudo cp $WRAPPER_BINARY_PATH $WRAPPER_PATH || error "Failed to move the wrapper binary to /usr/local/bin."
+
+    # Make sure the wrapper binary is executable
+    sudo chmod +x $WRAPPER_PATH || error "Failed to make the wrapper binary executable."
+
+    echo "Installation complete! You can now run 'metta-run' from any path."
+else
+    error "Wrapper build failed or the binary was not found."
 fi
 
-echo "#!/bin/bash" | sudo tee $WRAPPER_PATH
-echo "source $VENV_DIR/bin/activate && metta \"\$@\"" | sudo tee -a $WRAPPER_PATH
-sudo chmod +x $WRAPPER_PATH || error "Failed to create the wrapper script."
-
-echo "To use the metta with python environment automatically activated, run 'metta-run' instead of 'metta'." 
-echo "To activate the virtual environment manually, run 'source $VENV_DIR/bin/activate' then use 'metta' as usual"
+echo "To use the metta with python environment automatically activated, run 'metta-run' instead of 'metta'."
+echo "To activate the virtual environment manually, run 'source $VENV_DIR/bin/activate' then use 'metta' as usual."
 echo "To deactivate it, simply run 'deactivate'."
