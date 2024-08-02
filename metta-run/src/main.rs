@@ -1,12 +1,12 @@
 use std::env;
 use std::fs;
-use std::io::{self, Write};
+use std::io;
 use std::process::{Command, Stdio};
 
 fn main() -> io::Result<()> {
-    // Define variables
     let venv_dir = format!("{}/metta-bin/venv", env::var("HOME").unwrap());
-    let tree_formatter_path = format!(
+    let python_interpreter = format!("{}/bin/python3", venv_dir);
+    let formatter_path = format!(
         "{}/metta-bin/tools/formatter/tree-formater.py",
         env::var("HOME").unwrap()
     );
@@ -19,7 +19,7 @@ fn main() -> io::Result<()> {
     }
 
     let mut format_tree = false;
-    let mut file_arg = "";
+    let file_arg: &String;
 
     if args.len() == 3 {
         if args[1] == "--ft" {
@@ -51,7 +51,23 @@ fn main() -> io::Result<()> {
 
     let metta_output_str = String::from_utf8_lossy(&metta_output.stdout);
 
-    println!("{}", metta_output_str);
+    if format_tree {
+        // Run the formatter with the metta output
+        let python_output = Command::new(&python_interpreter)
+            .arg(&formatter_path)
+            .arg(metta_output_str.trim())
+            .stdout(Stdio::inherit())
+            .output()
+            .expect("Failed to execute Python script");
+
+        if !python_output.status.success() {
+            eprintln!("Failed to format tree");
+            std::process::exit(1);
+        }
+    } else {
+        // else print the metta output 
+        print!("{}", metta_output_str);
+    }
 
     // Deactivate the virtual environment
     Command::new("sh")
@@ -59,5 +75,6 @@ fn main() -> io::Result<()> {
         .arg("deactivate")
         .output()
         .expect("Failed to deactivate virtual environment");
+
     Ok(())
 }
