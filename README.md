@@ -35,8 +35,7 @@ curl -fsSL https://raw.githubusercontent.com/iCog-Labs-Dev/metta-prebuilt-binary
 To uninstall the Metta binary and remove its environment, manually delete the installation directory and binaries:
 
 ```bash
-rm -rf $HOME/metta-bin
-sudo rm /usr/local/bin/metta /usr/local/bin/metta-run
+curl -fsSL https://raw.githubusercontent.com/iCog-Labs-Dev/metta-prebuilt-binary/main/uninstall.sh | bash
 ```
 
 ## Windows
