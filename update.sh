@@ -12,6 +12,7 @@ INSTALL_DIR="$HOME/metta-bin"
 VENV_DIR="$INSTALL_DIR/venv"
 BINARY_PATH="$INSTALL_DIR/v0.1.11/metta"
 DESTINATION_PATH="/usr/local/bin/metta"
+WRAPPER_BINARY_PATH="$HOME/metta-bin/metta-run/release/metta-run"
 WRAPPER_PATH="/usr/local/bin/metta-run"
 
 # Step 1: Update the repository
@@ -54,15 +55,14 @@ else
     error "Binary not found. Update failed."
 fi
 
-# Step 4: Update the wrapper script
-if [ -f "$WRAPPER_PATH" ]; then
-    echo "Updating the wrapper script at $WRAPPER_PATH..."
-    sudo rm "$WRAPPER_PATH" || error "Failed to remove old wrapper script."
+# Step 4: Update the wrapper binary
+if [ -f "$WRAPPER_BINARY_PATH" ]; then
+    echo "Updating the wrapper binary at $WRAPPER_PATH..."
+    sudo cp $WRAPPER_BINARY_PATH $WRAPPER_PATH || error "Failed to update the wrapper binary in /usr/local/bin."
+    sudo chmod +x $WRAPPER_PATH || error "Failed to make the wrapper binary executable."
+else
+    error "Wrapper binary not found. Update failed."
 fi
-
-echo "#!/bin/bash" | sudo tee $WRAPPER_PATH
-echo "source $VENV_DIR/bin/activate && metta \"\$@\"" | sudo tee -a $WRAPPER_PATH
-sudo chmod +x $WRAPPER_PATH || error "Failed to create the wrapper script."
 
 echo "Update complete! You can now run 'metta' from any path."
 echo "To use the metta with python environment automatically activated, run 'metta-run' instead of 'metta'."
