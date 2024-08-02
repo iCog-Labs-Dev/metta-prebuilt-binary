@@ -18,9 +18,26 @@ After running the setup script, you can start using Metta directly from the term
 - `metta-run`: Run Metta with the Python environment automatically activated.
 - `metta`: Run Metta without activating the Python environment automatically but you need to activate it manually.
 
-### Linux
-- `metta-run`: Run Metta with the Python environment automatically activated.
-- `metta`: Run Metta without activating the Python environment automatically but you need to activate it manually.
+### Running Metta
+
+- To run a Metta file:
+
+  ```bash
+  metta-run example.metta
+  ```
+
+- To format the tree output (this only works if your Metta file returns a tree):
+
+  ```bash
+  metta-run --ft example.metta
+  ```
+
+- To run Metta without automatically activating the Python environment (you need to activate it manually first):
+
+  ```bash
+  source $HOME/metta-bin/venv/bin/activate
+  metta example.metta
+  ```
 
 ## Update
 
