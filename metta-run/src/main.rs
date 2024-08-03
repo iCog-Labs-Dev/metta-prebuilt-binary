@@ -42,7 +42,7 @@ fn main() -> io::Result<()> {
     let activate_script = format!("{}/bin/activate", venv_dir);
     let activate_command = format!("source {} && metta {}", activate_script, file_arg);
 
-    let metta_output = Command::new("sh")
+    let metta_output = Command::new("bash")
         .arg("-c")
         .arg(&activate_command)
         .stdout(Stdio::piped())
@@ -77,7 +77,7 @@ fn main() -> io::Result<()> {
     }
 
     // Deactivate the virtual environment
-    Command::new("sh")
+    Command::new("bash")
         .arg("-c")
         .arg("deactivate")
         .output()
