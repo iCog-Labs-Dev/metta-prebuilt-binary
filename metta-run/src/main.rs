@@ -46,10 +46,17 @@ fn main() -> io::Result<()> {
         .arg("-c")
         .arg(&activate_command)
         .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
         .output()
         .expect("Failed to execute command");
 
     let metta_output_str = String::from_utf8_lossy(&metta_output.stdout);
+    let metta_output_stderr = String::from_utf8_lossy(&metta_output.stderr);
+
+    if !metta_output.status.success() {
+        eprintln!("{}", metta_output_stderr);
+        std::process::exit(1);
+    }
 
     if format_tree {
         // Run the formatter with the metta output
@@ -57,6 +64,7 @@ fn main() -> io::Result<()> {
             .arg(&formatter_path)
             .arg(metta_output_str.trim())
             .stdout(Stdio::inherit())
+            .stderr(Stdio::inherit())
             .output()
             .expect("Failed to execute Python script");
 
@@ -65,7 +73,6 @@ fn main() -> io::Result<()> {
             std::process::exit(1);
         }
     } else {
-        // else print the metta output 
         print!("{}", metta_output_str);
     }
 
