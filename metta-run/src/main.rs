@@ -58,19 +58,25 @@ fn main() -> io::Result<()> {
         std::process::exit(1);
     }
 
+    // check if there are tree in metta output if there is tree and format_tree = true then format the tree
     if format_tree {
-        // Run the formatter with the metta output
-        let python_output = Command::new(&python_interpreter)
-            .arg(&formatter_path)
-            .arg(metta_output_str.trim())
-            .stdout(Stdio::inherit())
-            .stderr(Stdio::inherit())
-            .output()
-            .expect("Failed to execute Python script");
+        for line in metta_output_str.lines() {
+            if line.contains("TreeNode") {
+                let python_output = Command::new(&python_interpreter)
+                    .arg(&formatter_path)
+                    .arg(line)
+                    .stdout(Stdio::inherit())
+                    .stderr(Stdio::inherit())
+                    .output()
+                    .expect("Failed to execute Python script");
 
-        if !python_output.status.success() {
-            eprintln!("Failed to format tree");
-            std::process::exit(1);
+                if !python_output.status.success() {
+                    eprintln!("Failed to format tree");
+                    std::process::exit(1);
+                }
+            } else {
+                println!("{}", line);
+            }
         }
     } else {
         print!("{}", metta_output_str);
