@@ -46,6 +46,14 @@ class TreeFormatter:
         simplified_string = str(input).split(")")[0] + ")"
         return simplified_string
 
+    def get_node_type(self, node):
+        if "ROOT" in node:
+            return "ROOT"
+        elif "OR" in node:
+            return "OR"
+        else:
+            return "AND"
+
     def print_tree(self, input, indent=0):
         if input == "Nil":
             return
@@ -56,8 +64,8 @@ class TreeFormatter:
         right_child = self.get_right_child(input)
 
         if indent == 0:
-            is_or_node = "OR" in current_node
-            print("TreeNode " + ("OR" if is_or_node else "AND"))
+            node_type = self.get_node_type(current_node)
+            print(f"TreeNode {node_type}")
         else:
             print("─" * indent + " " + str(current_node))
 
