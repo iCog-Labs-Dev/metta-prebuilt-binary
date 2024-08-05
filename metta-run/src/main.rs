@@ -61,7 +61,7 @@ fn main() -> io::Result<()> {
     // check if there are tree in metta output if there is tree and format_tree = true then format the tree
     if format_tree {
         for line in metta_output_str.lines() {
-            if line.contains("TreeNode") {
+            if line.starts_with("[(TreeNode") {
                 let python_output = Command::new(&python_interpreter)
                     .arg(&formatter_path)
                     .arg(line)
