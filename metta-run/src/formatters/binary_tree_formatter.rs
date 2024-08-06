@@ -8,7 +8,7 @@ pub fn format(file: String) {
         std::process::exit(1);
     }
     let formatter_path = format!(
-        "{}/metta-bin/tools/formatter/tree-formater.py",
+        "{}/metta-bin/tools/formatter/binary_tree_formater.py",
         env::var("HOME").unwrap()
     );
 
