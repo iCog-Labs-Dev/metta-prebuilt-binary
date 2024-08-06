@@ -15,6 +15,7 @@ class TreeFormatter:
             (: getChild (-> Tree Location Tree))
             (= (getChild (TreeNode $nodeValue $guardSet Nil) $opt) Nil)
             (= (getChild (TreeNode $nodeValue $guardSet (Cons $l $xs)) L) $l)
+            (= (getChild (TreeNode $nodeValue $guardSet (Cons $l Nil)) R) NilNode)
             (= (getChild (TreeNode $nodeValue $guardSet (Cons $l (Cons $r $xs))) R) $r)
             """
         )
