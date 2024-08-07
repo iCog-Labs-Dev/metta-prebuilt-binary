@@ -67,6 +67,9 @@ class TreeFormatter:
         if indent == 0:
             node_type = self.get_node_type(current_node)
             print(f"TreeNode {node_type}")
+        elif input == "NilNode":
+            print("─" * indent + " " + "(NilNode)")
+            return
         else:
             print("─" * indent + " " + str(current_node))
 
