@@ -1,12 +1,18 @@
-use std::env;
 use std::process::{Command, Stdio};
+use std::{env, fs};
 
-pub fn run(file: String) -> String {
+pub fn run(file_path: String) -> String {
+    // cehck if the file exists
+    if !fs::metadata(&file_path).is_ok() {
+        eprintln!("File not found: {}", file_path);
+        std::process::exit(1);
+    }
+
     let venv_dir = format!("{}/metta-bin/venv", env::var("HOME").unwrap());
 
     // Activate the virtual environment and run the file with metta
     let activate_script = format!("{}/bin/activate", venv_dir);
-    let metta_runner = format!("source {} && metta {}", activate_script, file);
+    let metta_runner = format!("source {} && metta {}", activate_script, file_path);
 
     let metta_output = Command::new("bash")
         .arg("-c")

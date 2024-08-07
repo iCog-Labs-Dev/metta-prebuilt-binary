@@ -1,18 +1,11 @@
 use crate::runners;
-use std::{env, fs};
+use std::env;
 
-pub fn format(file: String) {
-    // cehck if the file exists
-    if !fs::metadata(&file).is_ok() {
-        eprintln!("File not found: {}", file);
-        std::process::exit(1);
-    }
+pub fn format(metta_output: String) {
     let formatter_path = format!(
         "{}/metta-bin/tools/formatter/binary_tree_formater.py",
         env::var("HOME").unwrap()
     );
-
-    let metta_output = runners::metta::run(file);
 
     //check if there are tree in metta output if there is tree format them
     for line in metta_output.lines() {

@@ -26,10 +26,16 @@ After running the setup script, you can start using Metta directly from the term
   metta-run example.metta
   ```
 
-- To format the tree output (this only works if your Metta file returns a tree):
+- To format binary tree:
 
   ```bash
-  metta-run --ft example.metta
+  metta-run example.metta fbt
+  ```
+
+- To format constraint tree:
+
+  ```bash
+  metta-run example.metta fct
   ```
 
 - To run Metta without automatically activating the Python environment (you need to activate it manually first):
