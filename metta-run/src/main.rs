@@ -14,7 +14,7 @@ fn main() -> io::Result<()> {
         commands: Option<Commands>,
     }
 
-    #[derive(Subcommand, Debug, Clone)]
+    #[derive(Subcommand)]
     enum Commands {
         #[command(flatten)]
         Format(FormatterCommands),
