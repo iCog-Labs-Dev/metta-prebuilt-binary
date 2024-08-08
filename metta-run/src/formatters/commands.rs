@@ -1,6 +1,6 @@
 use clap::Subcommand;
 
-use super::binary_tree_formatter;
+use super::{binary_tree_formatter, constraint_tree_formatter};
 
 #[derive(Subcommand, Debug, Clone)]
 pub enum FormatterCommands {
@@ -14,6 +14,6 @@ pub enum FormatterCommands {
 pub fn format(metta_output: String, command: FormatterCommands) {
     match command {
         FormatterCommands::Fbt => binary_tree_formatter::format(metta_output),
-        FormatterCommands::Fct => println!("under construction"),
+        FormatterCommands::Fct => constraint_tree_formatter::format(metta_output),
     }
 }
