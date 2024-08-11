@@ -7,6 +7,12 @@ pub fn format(metta_output: String) {
         env::var("HOME").unwrap()
     );
 
+    let checker_path = format!(
+        "{}/metta-bin/tools/utils/binary_tree_checker.py",
+        env::var("HOME").unwrap()
+    );
+
+
     //check if there are tree in metta output if there is tree format them
     for line in metta_output.lines() {
         if line.starts_with("[(TreeNode") {
