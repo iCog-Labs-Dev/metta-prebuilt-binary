@@ -1,3 +1,5 @@
+use std::env;
+
 use crate::runners;
 
 pub fn format(metta_output: String) {
@@ -12,8 +14,10 @@ pub fn format(metta_output: String) {
 }
 
 fn format_tree(tree: &str) {
-    let metta_run =
-        format!("/home/pro/Development/Test/metta-prebuilt-binary/tools/utils/metta_runner.py");
+    let metta_run = format!(
+        "{}/metta-bin/tools/utils/metta_runner.py",
+        env::var("HOME").unwrap()
+    );
 
     fn simplify_tree_node(input: &str) -> String {
         let simplified_string = input.split(")").collect::<Vec<&str>>()[0].to_string() + ")";
