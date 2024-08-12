@@ -1,5 +1,7 @@
 import argparse
+
 from hyperon import MeTTa
+
 
 class BinaryTreeChecker:
     def __init__(self):
@@ -25,7 +27,9 @@ class BinaryTreeChecker:
             !(check_binary_tree {tree_node})
             """
         )
-        return result
+
+        return result[0][0]
+
 
 class CLIChecker:
     def __init__(self):
