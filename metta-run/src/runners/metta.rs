@@ -38,4 +38,6 @@ pub fn run(file_path: String) -> String {
         .expect("Failed to deactivate virtual environment");
 
     format!("{}{}", metta_output_stderr, metta_output_str)
+        .trim()
+        .to_string()
 }
