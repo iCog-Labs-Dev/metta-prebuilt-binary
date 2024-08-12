@@ -1,9 +1,9 @@
 use std::{
     env, fs,
-    process::{Command, Output, Stdio},
+    process::{Command, Stdio},
 };
 
-pub fn run(file_path: &String, arg: &String) -> Output {
+pub fn run(file_path: &String, arg: &String) -> String {
     // cehck if the file exists
     if !fs::metadata(&file_path).is_ok() {
         eprintln!("File not found: {}", file_path);
@@ -16,10 +16,17 @@ pub fn run(file_path: &String, arg: &String) -> Output {
     let python_output = Command::new(&python_interpreter)
         .arg(&file_path)
         .arg(&arg)
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
         .output()
         .expect("Failed to execute Python script");
+
+    if !python_output.status.success() {
+        eprintln!("{}", String::from_utf8_lossy(&python_output.stderr));
+        std::process::exit(1);
+    }
+
+    let python_output_str = String::from_utf8_lossy(&python_output.stdout);
 
     // Deactivate the virtual environment
     Command::new("bash")
@@ -28,5 +35,5 @@ pub fn run(file_path: &String, arg: &String) -> Output {
         .output()
         .expect("Failed to deactivate virtual environment");
 
-    python_output
+    python_output_str.to_string()
 }
