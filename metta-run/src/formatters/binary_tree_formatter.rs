@@ -1,5 +1,3 @@
-use std::env;
-
 use crate::runners;
 
 pub fn format(metta_output: String) {
@@ -14,11 +12,6 @@ pub fn format(metta_output: String) {
 }
 
 fn format_tree(tree: &str) {
-    let metta_run = format!(
-        "{}/metta-bin/tools/utils/metta_runner.py",
-        env::var("HOME").unwrap()
-    );
-
     fn simplify_tree_node(input: &str) -> String {
         let simplified_string = input.split(")").collect::<Vec<&str>>()[0].to_string() + ")";
         simplified_string
@@ -53,14 +46,14 @@ fn format_tree(tree: &str) {
     let get_left_child = |input: &str| -> String {
         let tree = remove_brackets(&input);
         let getter_code = format!("{}\n !(getChild {} L) ", get_child, tree);
-        let result = runners::python::run(&metta_run, &getter_code);
+        let result = runners::python::run(None, &getter_code);
         remove_brackets(&result)
     };
 
     let get_right_child = |input: &str| -> String {
         let tree = remove_brackets(&input);
         let getter_code = format!("{}\n !(getChild {} R) ", get_child, tree);
-        let result = runners::python::run(&metta_run, &getter_code);
+        let result = runners::python::run(None, &getter_code);
         remove_brackets(&result)
     };
 
