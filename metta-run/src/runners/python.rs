@@ -3,7 +3,17 @@ use std::{
     process::{Command, Stdio},
 };
 
-pub fn run(file_path: &String, arg: &String) -> String {
+pub fn run(file_path: Option<&String>, arg: &String) -> String {
+    let python_metta_runner = format!(
+        "{}/metta-bin/tools/utils/metta_runner.py",
+        env::var("HOME").unwrap()
+    );
+
+    let file_path = match file_path {
+        Some(path) => path,
+        None => &python_metta_runner,
+    };
+
     // cehck if the file exists
     if !fs::metadata(&file_path).is_ok() {
         eprintln!("File not found: {}", file_path);
@@ -35,5 +45,5 @@ pub fn run(file_path: &String, arg: &String) -> String {
         .output()
         .expect("Failed to deactivate virtual environment");
 
-    python_output_str.to_string()
+    python_output_str.trim().to_string()
 }
