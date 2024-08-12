@@ -9,23 +9,34 @@ on:
       - main
 
 jobs:
-  test:
+  setup-and-test:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
+    - name: Run Metta setup script
+      run: |
+        curl -fsSL https://raw.githubusercontent.com/iCog-Labs-Dev/metta-prebuilt-binary/main/install.sh | bash
+
     - name: Set up Rust
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
-        override: true
 
     - name: Navigate to the metta-run directory
       working-directory: ./metta-run
       run: |
         echo "Moved to metta-run directory"
-        
+
     - name: Run tests
       working-directory: ./metta-run
       run: cargo test --verbose
+
+    - name: Ensure metta-run is executable
+      run: chmod +x $HOME/metta-bin/metta-run
+
+    - name: Test running metta-run binary
+      run: |
+        $HOME/metta-bin/metta-run --help
+        $HOME/metta-bin/metta-run example.metta
