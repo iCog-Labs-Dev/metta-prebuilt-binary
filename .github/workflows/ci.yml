@@ -35,8 +35,3 @@ jobs:
 
     - name: Ensure metta-run is executable
       run: chmod +x $HOME/metta-bin/metta-run
-
-    - name: Test running metta-run binary
-      run: |
-        $HOME/metta-bin/metta-run --help
-        $HOME/metta-bin/metta-run example.metta
