@@ -3,6 +3,7 @@ use formatters::commands::{format, FormatterCommands};
 use std::io;
 mod formatters;
 mod runners;
+mod tools;
 
 fn main() -> io::Result<()> {
     #[derive(Parser)]
@@ -22,7 +23,10 @@ fn main() -> io::Result<()> {
 
     let args = Args::parse();
     let file = args.file;
+
+    let start_time = tools::logger::start_timer();
     let metta_output = runners::metta::run(file);
+    tools::logger::stop_timer(start_time, &metta_output)?;
 
     if let Some(command) = args.commands {
         match command {
@@ -31,6 +35,5 @@ fn main() -> io::Result<()> {
     } else {
         println!("{}", metta_output);
     }
-
     Ok(())
 }
