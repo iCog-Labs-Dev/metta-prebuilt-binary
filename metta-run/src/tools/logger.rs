@@ -1,7 +1,8 @@
 use chrono::Local;
+use std::env;
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 pub fn start_timer() -> Instant {
     Instant::now()
@@ -11,7 +12,8 @@ pub fn stop_timer(start_time: Instant, metta_output: &String) -> Result<(), std:
     let now = Local::now();
     let formatted_date = now.format("%Y-%m-%d").to_string();
 
-    let log_file_name = format!("{}.log", formatted_date);
+    let metta_bin = format!("{}/metta-bin/", env::var("HOME").unwrap());
+    let log_file_name = format!("{}{}.log", metta_bin, formatted_date);
 
     let end_time = Instant::now();
     let elapsed_time = end_time.duration_since(start_time);
