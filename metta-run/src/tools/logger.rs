@@ -3,6 +3,7 @@ use std::env;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
+use std::env::current_dir;
 
 pub fn start_timer() -> Instant {
     Instant::now()
@@ -12,8 +13,15 @@ pub fn stop_timer(start_time: Instant, metta_output: &String) -> Result<(), std:
     let now = Local::now();
     let formatted_date = now.format("%Y-%m-%d").to_string();
 
-    let metta_bin = format!("{}/metta-bin/", env::var("HOME").unwrap());
-    let log_file_name = format!("{}{}.log", metta_bin, formatted_date);
+
+    let file_path: Option<String> = match current_dir() {
+        Ok(path) => Some(path.to_string_lossy().into_owned()),
+        Err(error) => None
+    };
+    let log_file_name = match file_path {
+        Some(path) => format!("{}/{}.log", path, formatted_date),
+        None => todo!()
+    };
 
     let end_time = Instant::now();
     let elapsed_time = end_time.duration_since(start_time);
