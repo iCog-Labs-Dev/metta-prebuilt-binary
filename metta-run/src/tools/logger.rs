@@ -10,12 +10,8 @@ pub fn start_timer() -> Instant {
 pub fn stop_timer(start_time: Instant, metta_output: &String) -> Result<(), std::io::Error> {
     let now = Local::now();
     let formatted_date = now.format("%Y-%m-%d").to_string();
-    let log_file_name = format!("{}.log", formatted_date);
 
-    let mut output_file = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(&log_file_name)?;
+    let log_file_name = format!("{}.log", formatted_date);
 
     let end_time = Instant::now();
     let elapsed_time = end_time.duration_since(start_time);
@@ -25,6 +21,12 @@ pub fn stop_timer(start_time: Instant, metta_output: &String) -> Result<(), std:
         elapsed_time.as_secs_f32(),
         metta_output
     );
+
+    let mut output_file = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open(&log_file_name)?;
+
     output_file.write_all(final_output.as_bytes())?;
 
     Ok(())
