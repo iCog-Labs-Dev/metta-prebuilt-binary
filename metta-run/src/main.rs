@@ -5,6 +5,7 @@ mod formatters;
 mod runners;
 mod tools;
 
+
 fn main() -> io::Result<()> {
     #[derive(Parser)]
     #[command(name = "metta-run")]
@@ -26,7 +27,8 @@ fn main() -> io::Result<()> {
 
     let start_time = tools::logger::start_timer();
     let metta_output = runners::metta::run(file);
-    tools::logger::stop_timer(start_time, &metta_output)?;
+
+    let _ = tools::logger::stop_timer(start_time, &metta_output);
 
     if let Some(command) = args.commands {
         match command {
