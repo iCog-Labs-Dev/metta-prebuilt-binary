@@ -17,7 +17,6 @@ pub fn stop_timer(start_time: Instant, metta_output: &String) -> Result<(), std:
         env::var("HOME").unwrap(),
         formatted_date
     );
-    println!("{}", log_file_name);
 
     let end_time = Instant::now();
     let elapsed_time = end_time.duration_since(start_time);
