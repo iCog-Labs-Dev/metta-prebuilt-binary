@@ -1,16 +1,10 @@
-
 use crate::runners;
 
 pub fn format(_metta_output: String) {
     //check if there are tree in metta output if there is tree format them
     for line in _metta_output.lines() {
         if line.starts_with("[(TreeNode") {
-            let is_binary_tree = is_binary_tree(&line);
-            if !is_binary_tree {
-                format_tree(&line);
-                continue;
-            }
-            println!("{}", line);
+            format_tree(&line);
         } else {
             println!("{}", line);
         }
@@ -97,31 +91,4 @@ fn format_tree(tree: &str) {
     }
 
     print_tree(tree, 0, &get_guardset, &get_tree_head, &get_tree_tail);
-}
-
-fn is_binary_tree(tree: &str) -> bool {
-    let main_metta_functions = format!(
-        "
-            ; check the length of the list
-            (: length (-> (List $t) Number))
-            (= (length Nil) 0)
-            (= (length (Cons $x $xs))
-                (+ 1 (length $xs)))
-
-            ; function to check if the tree is binary
-            (: check_binary_tree (-> Tree Bool))
-            (= (check_binary_tree (TreeNode $value $guard_set $children))
-                (== 2 (length $children)))
-        "
-    );
-
-    let tree = &tree.to_string().replace("[", "").replace("]", "");
-    let getter_code = format!("{}\n !(check_binary_tree {}) ", main_metta_functions, tree);
-    let result = runners::python::run(None, &getter_code);
-
-    if result == "[[False]]" {
-        return false;
-    } else {
-        return true;
-    }
 }
