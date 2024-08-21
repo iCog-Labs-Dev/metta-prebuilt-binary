@@ -1,7 +1,7 @@
 use std::process::{Command, Stdio};
 use std::{env, fs};
 
-pub fn run(file_path: String) -> String {
+pub fn run(file_path: String) -> (String , String) {
     // cehck if the file exists
     if !fs::metadata(&file_path).is_ok() {
         eprintln!("File not found: {}", file_path);
@@ -25,11 +25,6 @@ pub fn run(file_path: String) -> String {
     let metta_output_str = String::from_utf8_lossy(&metta_output.stdout);
     let metta_output_stderr = String::from_utf8_lossy(&metta_output.stderr);
 
-    if !metta_output.status.success() {
-        eprintln!("{}", metta_output_stderr);
-        std::process::exit(1);
-    }
-
     // Deactivate the virtual environment
     Command::new("bash")
         .arg("-c")
@@ -37,7 +32,6 @@ pub fn run(file_path: String) -> String {
         .output()
         .expect("Failed to deactivate virtual environment");
 
-    format!("{}{}", metta_output_stderr, metta_output_str)
-        .trim()
-        .to_string()
+    ( metta_output_stderr.trim().to_string(), metta_output_str.trim().to_string())
+        
 }
