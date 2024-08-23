@@ -26,7 +26,7 @@ fn format_tree(tree: &str) {
         input.replace("[", "").replace("]", "").trim().to_string()
     }
 
-    let main_metta_functions = format!(
+    let main_children_functions = format!(
         "
             ;; -------- a function to get the right or left child
 
@@ -39,21 +39,37 @@ fn format_tree(tree: &str) {
 
     let get_children = |input: &str| -> String {
         let tree = remove_brackets(&input);
-        let getter_code = format!("{}\n !(getChildren {}) ", main_metta_functions, tree);
+        let getter_code = format!("{}\n !(getChildren {}) ", main_children_functions, tree);
+        let result = runners::python::run(None, &getter_code);
+        remove_brackets(&result)
+    };
+
+    let main_guardset_functions = format!(
+        "
+            (:getGuardSet (-> Tree (List Tree)))
+            (= (getGuardSet (TreeNode $nodeVal $guardSet $children)) $guardSet)
+            (= (head (Cons $x $xs)) $x)
+            (= (tail (Cons $x $xs)) $xs)
+        "
+    );
+
+    let get_guardset = |input: &str| -> String {
+        let tree = remove_brackets(&input);
+        let getter_code = format!("{}\n !(getGuardSet {}) ", main_guardset_functions, tree);
         let result = runners::python::run(None, &getter_code);
         remove_brackets(&result)
     };
 
     let get_tree_head = |input: &str| -> String {
         let tree = remove_brackets(&input);
-        let getter_code = format!("{}\n !(getTreeHead {}) ", main_metta_functions, tree);
+        let getter_code = format!("{}\n !(getTreeHead {}) ", main_children_functions, tree);
         let result = runners::python::run(None, &getter_code);
         remove_brackets(&result)
     };
 
     let get_tree_tail = |input: &str| -> String {
         let tree = remove_brackets(&input);
-        let getter_code = format!("{}\n !(getTreeTail {}) ", main_metta_functions, tree);
+        let getter_code = format!("{}\n !(getTreeTail {}) ", main_children_functions, tree);
         let result = runners::python::run(None, &getter_code);
         remove_brackets(&result)
     };
@@ -62,6 +78,7 @@ fn format_tree(tree: &str) {
         tree: &str,
         indent: u32,
         get_children: &dyn Fn(&str) -> String,
+        get_guardset: &dyn Fn(&str) -> String,
         get_tree_head: &dyn Fn(&str) -> String,
         get_tree_tail: &dyn Fn(&str) -> String,
     ) {
@@ -71,6 +88,7 @@ fn format_tree(tree: &str) {
 
         let current_node = simplify_tree_node(&tree);
         let mut children = get_children(&tree);
+        let mut guardset = get_guardset(&tree);
 
         if indent == 0 {
             println!("{}{}", " ".repeat(indent as usize), current_node);
@@ -78,26 +96,45 @@ fn format_tree(tree: &str) {
             println!("{}{}{}", " ".repeat(indent as usize), "├─", current_node);
         }
 
-        if children != "Nil" {
-            println!("{}{}", " ".repeat(indent as usize), "└──Children's");
+        if guardset != "Nil" {
+            println!("{}{}", " ".repeat(indent as usize), "└──GuardSet's");
+            while guardset != "Nil" {
+                let guard = get_tree_head(&guardset);
+                if guard != "Nil" {
+                    println!("{}{}{}", " ".repeat(indent as usize), "   ├─", guard);
+                }
+                guardset = get_tree_tail(&guardset);
+            }
         }
 
-        while children != "Nil" {
-            let child = get_tree_head(&children);
-            if child != "Nil" {
-                print_tree(
-                    &child,
-                    indent + 4,
-                    &get_children,
-                    &get_tree_head,
-                    &get_tree_tail,
-                );
+        if children != "Nil" {
+            println!("{}{}", " ".repeat(indent as usize), "└──Children's");
+
+            while children != "Nil" {
+                let child = get_tree_head(&children);
+                if child != "Nil" {
+                    print_tree(
+                        &child,
+                        indent + 4,
+                        &get_children,
+                        &get_guardset,
+                        &get_tree_head,
+                        &get_tree_tail,
+                    );
+                }
+                children = get_tree_tail(&children);
             }
-            children = get_tree_tail(&children);
         }
     }
 
-    print_tree(tree, 0, &get_children, &get_tree_head, &get_tree_tail);
+    print_tree(
+        tree,
+        0,
+        &get_children,
+        &get_guardset,
+        &get_tree_head,
+        &get_tree_tail,
+    );
 }
 
 fn is_binary_tree(tree: &str) -> bool {
