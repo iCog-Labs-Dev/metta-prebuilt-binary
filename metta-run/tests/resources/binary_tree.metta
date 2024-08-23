@@ -1,5 +1,5 @@
 !(TreeNode (Value Nil False ROOT) Nil (Cons NilNode (Cons (TreeNode (Value Nil True OR) Nil (Cons (TreeNode (Value a False LITERAL) Nil Nil) (Cons (TreeNode (Value Nil True AND) Nil (Cons (TreeNode (Value b False LITERAL) Nil Nil) (Cons (TreeNode (Value c False LITERAL) Nil Nil) Nil))) Nil))) Nil)))
-!(assertEqualToResult 3  (+ 1 2) )
+; !(assertEqualToResult 3  (+ 1 2) )
 
 ; ; !(get-type )
 
