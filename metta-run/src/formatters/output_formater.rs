@@ -6,7 +6,6 @@ pub fn format(metta_output: (String, String)) {
     let mut indent_level = 0;
     let (metta_err, metta_str) = metta_output;
 
-    // println!("this is working ++++++++++++++++++++++++++++++++ {}",);
 
     if !metta_err.is_empty() {
         if let Some(last_line) = metta_err.lines().last() {
