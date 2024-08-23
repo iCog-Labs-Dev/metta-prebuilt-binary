@@ -37,6 +37,11 @@ After running the setup script, you can start using Metta directly from the term
   ```bash
   metta-run example.metta fct
   ```
+- To format any output you get from metta-run:
+
+  ```bash
+  metta-run example.metta f
+  ```
 
 - To run Metta without automatically activating the Python environment (you need to activate it manually first):
 
