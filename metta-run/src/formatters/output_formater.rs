@@ -3,9 +3,7 @@ use colored::Colorize;
 use regex::Regex;
 
 pub fn format(metta_output: (String, String)) {
-    let mut indent_level = 0;
     let (metta_err, metta_str) = metta_output;
-
 
     if !metta_err.is_empty() {
         if let Some(last_line) = metta_err.lines().last() {
@@ -20,11 +18,11 @@ pub fn format(metta_output: (String, String)) {
 fn selective_print(outputs: Vec<String>) {
     for output in outputs {
         let formatted = prettify(&output);
-        let flag  = ".";
+        let flag = ".";
         if output.contains("(Error") {
-            println!("{} [{}]",flag.dimmed().bold().blue(), formatted.red());
+            println!("{} [{}]", flag.dimmed().bold().blue(), formatted.red());
         } else {
-            println!("{} [{}]",flag.dimmed().bold().blue(), formatted.green());
+            println!("{} [{}]", flag.dimmed().bold().blue(), formatted.green());
         }
     }
 }
