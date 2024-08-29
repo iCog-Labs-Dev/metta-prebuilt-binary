@@ -65,3 +65,18 @@ fn test_nested_constraint_tree_formatter() {
 
     assert_eq!(String::from_utf8_lossy(&output.stdout), expected_output);
 }
+
+#[test]
+fn test_guard_set_formatter() {
+    use std::process::Command;
+
+    let output = Command::new("cargo")
+        .arg("run")
+        .arg("tests/resources/guard_set.metta")
+        .arg("fgt")
+        .output()
+        .expect("failed to execute process");
+
+        let expected_output = "[(TreeNode (Value Nil False OR)\n└──GuardSets's\n    ├─(TreeNode (Value B True LITERAL)\n    ├─(TreeNode (Value D True LITERAL)\n    ├─(TreeNode (Value E False LITERAL)\n";
+    assert_eq!(String::from_utf8_lossy(&output.stdout), expected_output);
+}
